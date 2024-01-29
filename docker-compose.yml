@@ -10,27 +10,31 @@ volumes:
 
 services:
   mysql:
+    container_name: cnt_mysql
     image: mysql:8
     ports:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: prestashop
-      MYSQL_DATABASE: prestashop
+      MYSQL_ROOT_PASSWORD: 6919.*Asd
+      MYSQL_USER: erenor_cosmetics
+      MYSQL_DATABASE: erenor_cosmetics
     restart: unless-stopped
 
   keycloak:
+    container_name: cnt_keycloak
     image: quay.io/keycloak/keycloak:19.0.3
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-6919.*Asd}
     command:
       - start-dev
     ports:
       - "8003:8080"
 
   prestashop-git:
+    container_name: cnt_prestashop
     hostname: ${PS_HOSTNAME:-localhost}
     build:
       dockerfile: .docker/Dockerfile
@@ -43,10 +47,10 @@ services:
     environment:
       DISABLE_MAKE: ${DISABLE_MAKE:-0}
       PS_INSTALL_AUTO: ${PS_INSTALL_AUTO:-1}
-      DB_PASSWD: ${DB_PASSWD:-prestashop}
-      DB_NAME: ${DB_NAME:-prestashop}
+      DB_PASSWD: ${DB_PASSWD:-6919.*Asd}
+      DB_NAME: ${DB_NAME:-erenor_cosmetics}
       DB_SERVER: ${DB_SERVER:-mysql}
-      DB_PREFIX: ${DB_PREFIX:-ps_}
+      DB_PREFIX: ${DB_PREFIX:-ec_}
       PS_DOMAIN: ${PS_DOMAIN:-localhost:8001}
       PS_FOLDER_INSTALL: ${PS_FOLDER_INSTALL:-install-dev}
       PS_FOLDER_ADMIN: ${PS_FOLDER_ADMIN:-admin-dev}
@@ -56,8 +60,8 @@ services:
       PS_ENABLE_SSL: ${PS_ENABLE_SSL:-0}
       PS_ERASE_DB: ${PS_ERASE_DB:-0}
       PS_USE_DOCKER_MAILDEV: ${PS_USE_DOCKER_MAILDEV:-1}
-      ADMIN_MAIL: ${ADMIN_MAIL:-demo@prestashop.com}
-      ADMIN_PASSWD: ${ADMIN_PASSWD:-Correct Horse Battery Staple}
+      ADMIN_MAIL: ${ADMIN_MAIL:-ozkanciftci91@hotmail.com}
+      ADMIN_PASSWD: ${ADMIN_PASSWD:-6919.*Asd}
     command: ["/tmp/wait-for-it.sh", "--timeout=60", "--strict", "mysql:3306", "--", "/tmp/docker_run_git.sh"]
     ports:
       - "8001:80"
@@ -67,7 +71,22 @@ services:
     volumes:
       - ./:/var/www/html:delegated
 
+  phpmyadmin:
+    container_name: cnt_phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: 6919.*Asd
+      MYSQL_ROOT_PASSWORD: 6919.*Asd
+    restart: unless-stopped
+    depends_on:
+      - mysql
+
   maildev:
+    container_name: cnt_maildev
     image: 'maildev/maildev'
     ports:
       - "1080:1080"
